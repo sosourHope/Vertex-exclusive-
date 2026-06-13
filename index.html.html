@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vertex Exclusive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #0D0D0D;
+      --off-white:#F7F5F2;
+      --stone:    #C8C2B8;
+      --gold:     #B89A6A;
+      --mid:      #6E6860;
+      --white:    #FFFFFF;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--off-white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: transparent;
+      transition: background 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(247,245,242,0.92);
+      backdrop-filter: blur(12px);
+      padding: 18px 60px;
+      border-bottom: 1px solid var(--stone);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 1.25rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-cta {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border: 1px solid var(--black);
+      color: var(--black);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-cta:hover { background: var(--black); color: var(--off-white); }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 120px 60px 80px;
+      background: var(--off-white);
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.2rem, 5vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--black);
+      margin-bottom: 36px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--mid);
+      max-width: 380px;
+      line-height: 1.75;
+      margin-bottom: 52px;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 36px;
+      background: var(--black);
+      color: var(--off-white);
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s;
+    }
+    .btn-primary:hover { background: var(--gold); }
+    .btn-text {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-text:hover { color: var(--black); border-color: var(--black); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.88);
+    }
+    .hero-caption {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    /* placeholder image block */
+    .hero-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #1a1714 0%, #2e2820 60%, #3d3228 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-placeholder-inner {
+      text-align: center;
+      opacity: 0.25;
+    }
+    .hero-placeholder-inner span {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    /* ─── STRIP ───────────────────────────────────────── */
+    .strip {
+      background: var(--black);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      padding: 22px 60px;
+      overflow: hidden;
+    }
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      color: var(--stone);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .strip-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    /* ─── ABOUT ───────────────────────────────────────── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      padding: 140px 60px;
+    }
+    .about-left {
+      padding-right: 80px;
+      border-right: 1px solid var(--stone);
+    }
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .about-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 1.2;
+      color: var(--black);
+      margin-bottom: 32px;
+    }
+    .about-heading em { font-style: italic; }
+    .about-body {
+      font-size: 0.95rem;
+      color: var(--mid);
+      line-height: 1.85;
+      max-width: 460px;
+    }
+    .about-right {
+      padding-left: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 48px;
+    }
+    .stat-block {}
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 3.5rem;
+      color: var(--black);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-top: 6px;
+    }
+    .stat-divider { height: 1px; background: var(--stone); width: 100%; }
+
+    /* ─── SERVICES ────────────────────────────────────── */
+    .services { padding: 120px 60px; background: var(--black); }
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 72px;
+    }
+    .services-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      color: var(--off-white);
+      line-height: 1.2;
+    }
+    .services-heading em { font-style: italic; color: var(--gold); }
+    .services-note {
+      font-size: 0.78rem;
+      color: var(--stone);
+      max-width: 280px;
+      text-align: right;
+      line-height: 1.7;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #2a2520;
+    }
+    .service-card {
+      background: var(--black);
+      padding: 52px 44px;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .service-card:hover { background: #161210; }
+    .service-icon {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 28px;
+      font-style: italic;
+      font-weight: 300;
+    }
+    .service-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      margin-bottom: 16px;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--stone);
+      line-height: 1.8;
+    }
+
+    /* ─── PROCESS ─────────────────────────────────────── */
+    .process { padding: 140px 60px; }
+    .process-header { margin-bottom: 80px; }
+    .process-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 1.2;
+      margin-top: 20px;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .process-step {
+      padding: 40px 40px 40px 0;
+      border-top: 2px solid var(--stone);
+      transition: border-color 0.3s;
+    }
+    .process-step:hover { border-top-color: var(--gold); }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--stone);
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+    .step-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 14px;
+    }
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+
+    /* ─── QUOTE ───────────────────────────────────────── */
+    .quote-block {
+      padding: 100px 60px;
+      background: #F0ECE6;
+      text-align: center;
+    }
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      color: var(--gold);
+      line-height: 0.6;
+      display: block;
+      margin-bottom: 36px;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+      line-height: 1.4;
+      color: var(--black);
+      max-width: 780px;
+      margin: 0 auto 32px;
+      font-style: italic;
+    }
+    .quote-attr {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ─── CONTACT ─────────────────────────────────────── */
+    .contact {
+      padding: 140px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+    .contact-left {}
+    .contact-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 3vw, 3.4rem);
+      line-height: 1.15;
+      margin: 20px 0 32px;
+    }
+    .contact-body {
+      font-size: 0.9rem;
+      color: var(--mid);
+      line-height: 1.85;
+      margin-bottom: 44px;
+      max-width: 400px;
+    }
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .contact-detail a {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      text-decoration: none;
+      border-bottom: 1px solid var(--stone);
+      padding-bottom: 4px;
+      transition: border-color 0.2s;
+      display: inline-block;
+    }
+    .contact-detail a:hover { border-color: var(--gold); }
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-top: 60px;
+    }
+    .form-row { display: flex; flex-direction: column; gap: 8px; }
+    .form-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .form-input, .form-textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--stone);
+      padding: 10px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-textarea { resize: none; height: 80px; }
+    .form-submit {
+      align-self: flex-start;
+      margin-top: 12px;
+      padding: 14px 40px;
+      background: var(--black);
+      color: var(--off-white);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .form-submit:hover { background: var(--gold); }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 52px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #2a2520;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      text-decoration: none;
+    }
+    .footer-copy {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--mid);
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+    }
+    .footer-links a {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--off-white); }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 22px 28px; }
+      nav.scrolled { padding: 14px 28px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 45vw; }
+      .hero-left { padding: 100px 28px 60px; }
+      .about { grid-template-columns: 1fr; padding: 80px 28px; }
+      .about-left { border-right: none; border-bottom: 1px solid var(--stone); padding-right: 0; padding-bottom: 60px; margin-bottom: 60px; }
+      .about-right { padding-left: 0; }
+      .services { padding: 80px 28px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .services-note { text-align: left; max-width: 100%; }
+      .process { padding: 80px 28px; }
+      .process-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .contact { grid-template-columns: 1fr; padding: 80px 28px; gap: 48px; }
+      footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 28px; }
+      .strip { gap: 28px; padding: 18px 28px; flex-wrap: wrap; }
+      .quote-block { padding: 72px 28px; }
+    }
+    @media (max-width: 540px) {
+      .process-steps { grid-template-columns: 1fr; }
+    }
+
+    /* ─── SCROLL FADE IN ──────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a class="nav-logo" href="#">Vertex Exclusive</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="nav-cta" href="#contact">Enquire</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Event Management · Private & Corporate</p>
+      <h1 class="hero-title">Events that<br>hold <em>weight.</em></h1>
+      <p class="hero-sub">Vertex Exclusive handles the detail so the moment lands. From private gatherings to large-scale corporate productions — precise, considered, and built to perform.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#contact">Start a conversation</a>
+        <a class="btn-text" href="#services">What we do</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-placeholder">
+        <div class="hero-placeholder-inner">
+          <span>V</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-item"><span class="strip-dot"></span>Private Events</div>
+    <div class="strip-item"><span class="strip-dot"></span>Corporate Summits</div>
+    <div class="strip-item"><span class="strip-dot"></span>Brand Activations</div>
+    <div class="strip-item"><span class="strip-dot"></span>International Venues</div>
+    <div class="strip-item"><span class="strip-dot"></span>End-to-End Production</div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-left reveal">
+      <p class="section-label">About</p>
+      <h2 class="about-heading">Serious about<br><em>every detail.</em></h2>
+      <p class="about-body">Vertex Exclusive works with high-net-worth individuals, private offices, and corporations that have no margin for a mediocre event. We manage the full scope — venue, logistics, suppliers, talent, and on-the-day execution — without noise or ambiguity.<br><br>Our approach is direct. We ask the right questions, build a clear plan, and deliver exactly what was agreed.</p>
+    </div>
+    <div class="about-right reveal">
+      <div class="stat-block">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Events delivered</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <div class="stat-num">14</div>
+        <div class="stat-label">Countries</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-block">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Client retention, year one to two</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="services-header reveal">
+      <div>
+        <p class="section-label" style="color:var(--stone)">Services</p>
+        <h2 class="services-heading">What we<br>handle <em>for you.</em></h2>
+      </div>
+      <p class="services-note">Every engagement is scoped and priced individually. No packages, no defaults.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">I.</div>
+        <div class="service-title">Private Events</div>
+        <p class="service-desc">Dinners, celebrations, and milestones for individuals and families. Intimate or large-scale — designed around the guest, not a template.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">II.</div>
+        <div class="service-title">Corporate Events</div>
+        <p class="service-desc">Conferences, leadership retreats, product launches, and client hospitality. Purposeful programming that reflects your organisation's standard.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">III.</div>
+        <div class="service-title">Brand Experiences</div>
+        <p class="service-desc">Activations and experiential events that make your brand tangible. Concept through execution, with a clear brief and measurable outcomes.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">IV.</div>
+        <div class="service-title">Venue Sourcing</div>
+        <p class="service-desc">Access to exclusive venues — private estates, heritage spaces, and off-market locations not available through standard channels.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">V.</div>
+        <div class="service-title">Full Production</div>
+        <p class="service-desc">Technical production, lighting, sound, staging, and AV. We manage every contractor so you deal with one point of contact.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">VI.</div>
+        <div class="service-title">On-Day Management</div>
+        <p class="service-desc">A dedicated team on-site from setup to close. Every brief handed over runs exactly as planned, without improvisation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="process-header reveal">
+      <p class="section-label">How We Work</p>
+      <h2 class="process-heading">Four steps.<br>No ambiguity.</h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Discovery</div>
+        <p class="step-desc">A direct conversation about the event, the audience, the non-negotiables, and the budget. We listen more than we talk.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">02</div>
+        <div class="step-title">Proposal</div>
+        <p class="step-desc">A clear written scope with options where relevant. No padding, no ambiguity — just what we will do, when, and at what cost.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">03</div>
+        <div class="step-title">Execution</div>
+        <p class="step-desc">We manage every element, keep you updated at agreed checkpoints, and resolve problems before they reach you.</p>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">04</div>
+        <div class="step-title">Close</div>
+        <p class="step-desc">A debrief, final accounts, and any post-event deliverables. The relationship doesn't end when the event does.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <div class="quote-block reveal">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">The best event is the one where guests are fully present — because they sense that everything has been taken care of.</p>
+    <p class="quote-attr">Vertex Exclusive</p>
+  </div>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-left reveal">
+      <p class="section-label">Contact</p>
+      <h2 class="contact-heading">Let's talk<br>about your event.</h2>
+      <p class="contact-body">Initial enquiries are handled within 24 hours. We work with a limited number of clients at any one time — quality over volume.</p>
+      <div class="contact-detail">
+        <a href="mailto:enquiries@vertexexclusive.com">enquiries@vertexexclusive.com</a>
+        <a href="tel:+442012345678">+44 20 1234 5678</a>
+      </div>
+    </div>
+    <div class="contact-right reveal">
+      <div class="form-row">
+        <label class="form-label">Name</label>
+        <input class="form-input" type="text" placeholder="Your name" />
+      </div>
+      <div class="form-row">
+        <label class="form-label">Organisation</label>
+        <input class="form-input" type="text" placeholder="Company or private" />
+      </div>
+      <div class="form-row">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="your@email.com" />
+      </div>
+      <div class="form-row">
+        <label class="form-label">Tell us about your event</label>
+        <textarea class="form-textarea" placeholder="Date, type, scale — whatever helps us understand the brief."></textarea>
+      </div>
+      <button class="form-submit">Send enquiry</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a class="footer-logo" href="#">Vertex Exclusive</a>
+    <p class="footer-copy">© 2026 Vertex Exclusive. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">LinkedIn</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
